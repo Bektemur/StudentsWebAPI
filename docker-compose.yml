@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  students-app:
+    image: ${DOCKER_REGISTRY-}studentswebapp
+    container_name: students-backend-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - app-network
+
+  database:
+    image: postgres:latest
+    container_name: student_db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: student_db
+      TZ: 'GMT+5'
+      PGTZ: 'GMT+5'
+    ports:
+      - "5432:5432"
+    depends_on:
+      - students-app
+    volumes:
+      - /var/postgresql_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+    app-network:
+       driver: bridge
