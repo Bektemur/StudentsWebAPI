@@ -12,6 +12,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80:80"
+      - "5091:5091"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -35,7 +36,16 @@ services:
       - /var/postgresql_data:/var/lib/postgresql/data
     networks:
       - app-network
-
+  frontend:
+    build:
+      context: ./studentweb 
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - students-app
+    networks:
+      - app-network
 networks:
     app-network:
        driver: bridge
