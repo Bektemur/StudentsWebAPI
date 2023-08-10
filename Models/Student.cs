@@ -11,6 +11,8 @@ namespace WebAPI.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
         [ForeignKey(nameof(GroupId))]
         public int GroupId { get; set; }
         public Group Group { get; set; }

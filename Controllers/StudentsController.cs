@@ -9,33 +9,64 @@ using System.Text;
 using WebAPI.ApplicationContext;
 using WebAPI.Contract;
 using WebAPI.DTO;
+using WebAPI.Service;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class StudentsController : ControllerBase
     {
         private readonly ILogger<StudentsController> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IStudentService _service;
-        
+        private readonly IStudentService _studentService;
+
         public StudentsController(ILogger<StudentsController> logger, IConfiguration configuration, IStudentService studentService)
         {
             _logger = logger;
             _configuration = configuration;
-            _service = studentService;
+            _studentService = studentService;
         }
-        [HttpPost]
-        [Route("create")]
-        public async Task<IActionResult> Create(StudentDTO student)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentDTO>>> GetAllStudents()
         {
-            if (student != null)
-            {
-                _service.Add(student);
-                return Ok(student);
-            }
-            return BadRequest();
+            var students = await _studentService.GetAllAsync();
+            return Ok(students);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<StudentDTO>> GetStudentById(int id)
+        {
+            var student = await _studentService.GetByIdAsync(id);
+            if (student == null)
+                return NotFound();
+
+            return Ok(student);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<StudentDTO>> CreateStudent(StudentDTO studentDTO)
+        {
+            var createdStudent = await _studentService.CreateAsync(studentDTO);
+            return CreatedAtAction(nameof(GetStudentById), new { id = createdStudent }, createdStudent);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<StudentDTO>> UpdateStudent(int id, StudentDTO studentDTO)
+        {
+            var updatedStudent = await _studentService.UpdateAsync(id, studentDTO);
+            if (updatedStudent == null)
+                return NotFound();
+
+            return Ok(updatedStudent);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteStudent(int id)
+        {
+            await _studentService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using WebAPI.Contract;
 using WebAPI.DTO;
 
 namespace WebAPI.Controllers
@@ -7,31 +13,25 @@ namespace WebAPI.Controllers
     public class AuthenticateController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticateController(IConfiguration configuration)
+        public AuthenticateController(IConfiguration configuration, IAuthenticationService authenticationService)
         {
 
             _configuration = configuration;
+            _authenticationService = authenticationService;
 
         }
         [HttpPost("login")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> Authenticate([FromBody] UserLoginDTO user)
+        public IActionResult Login(UserLoginDTO user)
         {
-            var jwtSettings = _configuration.GetSection("JwtSettings");
-
-            int expires = Convert.ToInt32(jwtSettings["Expires"]) * 60;
-            //if (!await _service.AuthenticationService.ValidateUser(user))
-                return Unauthorized();
-
-            return Ok(new
+            var token = _authenticationService.GenerateToken(user);
+            if (String.IsNullOrWhiteSpace(token))
             {
-                //access_token = await _service.AuthenticationService.CreateToken(),
-                expires = expires,
-                token_type = "Bearer",
-                refresh_token = "",
-                refresh_expires = 0
-            });
+                return Unauthorized();
+            }
+            return Ok(token); 
         }
+        
     }
 }

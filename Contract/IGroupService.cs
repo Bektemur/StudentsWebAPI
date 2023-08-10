@@ -4,9 +4,10 @@ namespace WebAPI.Contract
 {
     public interface IGroupService
     {
-        public void Add(GroupDTO group);
-        public void Update(GroupDTO group, int Id);
-        public void Delete(int Id);
-        public void Find();
+        Task<IEnumerable<GroupDTO>> GetAllAsync();
+        Task<GroupDTO> GetByIdAsync(int id);
+        Task<GroupDTO> CreateAsync(GroupDTO groupDTO);
+        Task<GroupDTO> UpdateAsync(int id, GroupDTO groupDTO);
+        Task DeleteAsync(int id);
     }
 }
