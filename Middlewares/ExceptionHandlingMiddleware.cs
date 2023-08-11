@@ -24,7 +24,7 @@ namespace WebAPI.Middlewares
                 {
                     IServiceException serviceException => ((int)serviceException.StatusCode,
                     serviceException.Message),
-                    _ => (StatusCodes.Status500InternalServerError, ex.InnerException.Message),
+                    _ => (StatusCodes.Status500InternalServerError, ex.Message ),
                 };
                 context.Response.StatusCode = statusCode;
                 Microsoft.AspNetCore.Mvc.ProblemDetails problems = new()

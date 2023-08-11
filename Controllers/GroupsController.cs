@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
         {
             _groupService = groupService;
         }
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<GroupDTO>>> GetAllGroups()
         {
             var groups = await _groupService.GetAllAsync();
             return Ok(groups);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<GroupDTO>> GetGroupById(int id)
         {
             var group = await _groupService.GetByIdAsync(id);
@@ -33,14 +33,14 @@ namespace WebAPI.Controllers
             return Ok(group);
         }
 
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<ActionResult<GroupDTO>> CreateGroup(GroupDTO groupDTO)
         {
             var createdGroup = await _groupService.CreateAsync(groupDTO);
-            return CreatedAtAction(nameof(GetGroupById), createdGroup);
+            return Ok(createdGroup);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("edit/{id}")]
         public async Task<ActionResult<GroupDTO>> UpdateGroup(int id, GroupDTO groupDTO)
         {
             var updatedGroup = await _groupService.UpdateAsync(id, groupDTO);
@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             return Ok(updatedGroup);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteGroup(int id)
         {
             await _groupService.DeleteAsync(id);

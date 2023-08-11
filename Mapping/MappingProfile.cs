@@ -9,7 +9,8 @@ namespace WebAPI.Mapping
         public MappingProfile()
         {
             CreateMap<StudentDTO, Student>();
-            CreateMap<GroupDTO, Group>();
+            CreateMap<Group, GroupDTO>().ReverseMap();
+            CreateMap<GradeDTO, GradeDTO>();
             CreateMap<SubjectDTO, Subject>();
             CreateMap<GradeDTO, Grade>();
         }
