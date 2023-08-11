@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
         {
             _subjectService = subjectService;
         }
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllSubjects()
         {
             var subjects = await _subjectService.GetAllAsync();
             return Ok(subjects);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<SubjectDTO>> GetSubjectById(int id)
         {
             var subject = await _subjectService.GetByIdAsync(id);
@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<SubjectDTO>> CreateSubject(SubjectDTO subjectDTO)
         {
             var createdSubject = await _subjectService.CreateAsync(subjectDTO);
-            return CreatedAtAction(nameof(GetSubjectById), createdSubject);
+            return Ok(createdSubject);
         }
 
         [HttpPut("edit/{id}")]
@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             return Ok(updatedSubject);
         }
 
-        [HttpDelete("delete{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteSubject(int id)
         {
             await _subjectService.DeleteAsync(id);

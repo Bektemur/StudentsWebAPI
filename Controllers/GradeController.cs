@@ -17,14 +17,14 @@ namespace WebAPI.Controllers
             _gradeService = gradeService;
         }
 
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<ActionResult<IEnumerable<GradeDTO>>> GetAllGrades()
         {
             var grades = await _gradeService.GetAllAsync();
             return Ok(grades);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<GradeDTO>> GetGradeById(int id)
         {
             var grade = await _gradeService.GetByIdAsync(id);
@@ -34,14 +34,14 @@ namespace WebAPI.Controllers
             return Ok(grade);
         }
 
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<ActionResult<GradeDTO>> CreateGrade(GradeDTO gradeDTO)
         {
             var createdGrade = await _gradeService.CreateAsync(gradeDTO);
-            return CreatedAtAction(nameof(GetGradeById), createdGrade);
+            return Ok(createdGrade);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("edit/{id}")]
         public async Task<ActionResult<GradeDTO>> UpdateGrade(int id, GradeDTO gradeDTO)
         {
             var updatedGrade = await _gradeService.UpdateAsync(id, gradeDTO);
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
             return Ok(updatedGrade);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteGrade(int id)
         {
             await _gradeService.DeleteAsync(id);

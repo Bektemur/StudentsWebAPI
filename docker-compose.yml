@@ -33,7 +33,7 @@ services:
     depends_on:
       - students-app
     volumes:
-      - /var/postgresql_data:/var/lib/postgresql/data
+      - postgresql_data:/var/lib/postgresql/data
     networks:
       - app-network
   frontend:
@@ -49,3 +49,5 @@ services:
 networks:
     app-network:
        driver: bridge
+volumes:
+    postgresql_data:
