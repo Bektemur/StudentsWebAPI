@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
             _configuration = configuration;
             _studentService = studentService;
         }
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<ActionResult<IEnumerable<StudentDTO>>> GetAllStudents()
         {
             var students = await _studentService.GetAllAsync();
@@ -45,14 +45,14 @@ namespace WebAPI.Controllers
             return Ok(student);
         }
 
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<ActionResult<StudentDTO>> CreateStudent(StudentDTO studentDTO)
         {
             var createdStudent = await _studentService.CreateAsync(studentDTO);
-            return CreatedAtAction(nameof(GetStudentById), new { id = createdStudent }, createdStudent);
+            return Ok(createdStudent);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("edit/{id}")]
         public async Task<ActionResult<StudentDTO>> UpdateStudent(int id, StudentDTO studentDTO)
         {
             var updatedStudent = await _studentService.UpdateAsync(id, studentDTO);
@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
             return Ok(updatedStudent);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {
             await _studentService.DeleteAsync(id);

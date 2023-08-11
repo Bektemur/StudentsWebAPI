@@ -8,15 +8,13 @@ namespace WebAPI.ApplicationContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
         {
-            
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
             builder.Entity<Student>()
-             .HasOne(s => s.Group)
-             .WithMany(g => g.Students)
-             .HasForeignKey(s => s.GroupId);
+         .HasOne(s => s.Group)
+         .WithMany(g => g.Students)
+         .HasForeignKey(s => s.GroupId);
 
             builder.Entity<Grade>()
                 .HasOne(g => g.Student)
@@ -25,13 +23,14 @@ namespace WebAPI.ApplicationContext
 
             builder.Entity<Grade>()
                 .HasOne(g => g.Subject)
-                .WithMany()
+                .WithMany(s => s.Grades)
                 .HasForeignKey(g => g.SubjectId);
         }
-        public DbSet<Grade> Grades { get; set; }
+       
         public DbSet<Student> Students { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Grade> Grades { get; set; }
         //public DbSet<User> Users { get; set; }
     }
 }

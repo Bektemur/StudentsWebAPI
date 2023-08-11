@@ -16,6 +16,7 @@ namespace WebAPI
             services.AddScoped<ExceptionHandlingMiddleware>();
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAverageGradesService, AverageGradesService>();
             return services;
         }
     }
