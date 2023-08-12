@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 using WebAPI;
 using WebAPI.ApplicationContext;
@@ -86,7 +88,6 @@ builder.Services.AddSwaggerGen(x => {
                 });
 } );
 
-System.Threading.Thread.Sleep(10000);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -94,19 +95,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDependencyInjection(builder.Configuration);
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    if (!dbContext.Database.CanConnect())
-    {
-        dbContext.Database.EnsureCreated();
- 
-        dbContext.Database.Migrate();
-    }
-
-}
-// Configure the HTTP request pipeline.
+var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+context.Database.Migrate();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
