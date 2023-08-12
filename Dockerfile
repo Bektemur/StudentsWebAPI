@@ -13,10 +13,15 @@ RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
 FROM build AS migrate
 RUN dotnet ef database update --project "WebAPI.csproj"
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebAPI.dll"]
+COPY --from=publish /wait-for-it.sh /wait-for-it.sh
+ENTRYPOINT ["/wait-for-it.sh", "database:5432",  "--", "dotnet", "WebAPI.dll"]
+CMD ["dotnet", "WebAPI.dll"]

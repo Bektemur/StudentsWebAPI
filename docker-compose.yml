@@ -1,7 +1,24 @@
 version: '3.4'
 
 services:
-  students-app:
+
+   database:
+     image: postgres:latest
+     container_name: student_db
+     environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: student_db
+      TZ: 'GMT+5'
+      PGTZ: 'GMT+5'
+     ports:
+      - "5432:5432"
+     volumes:
+      - postgresql_data:/var/lib/postgresql/data
+     networks:
+      - app-network
+
+   students-app:
     image: ${DOCKER_REGISTRY-}studentswebapp
     container_name: students-backend-app
     build:
@@ -10,33 +27,20 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+    depends_on:
+        - database
     ports:
       - "80:80"
       - "5091:5091"
+    command: ["/wait-for-it.sh", "database:5432", "", "WebAPI.dll"]
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     networks:
       - app-network
 
-  database:
-    image: postgres:latest
-    container_name: student_db
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: student_db
-      TZ: 'GMT+5'
-      PGTZ: 'GMT+5'
-    ports:
-      - "5432:5432"
-    depends_on:
-      - students-app
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-  frontend:
+  
+   frontend:
     build:
       context: ./studentweb 
       dockerfile: Dockerfile
@@ -46,6 +50,7 @@ services:
       - students-app
     networks:
       - app-network
+
 networks:
     app-network:
        driver: bridge
