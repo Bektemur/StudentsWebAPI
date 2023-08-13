@@ -13,6 +13,7 @@ function GroupForm() {
 
         try {
             const token = localStorage.getItem('token');
+            console.log(token);
             const response = await axios.post(
                 'http://localhost/Groups/add',
                 {
@@ -33,10 +34,10 @@ function GroupForm() {
 
 return (
         <div>
-            <h2>Create Group</h2>
+            <h2>Добавить группу</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Group Name:</label>
+                    <label>Наименование: </label>
                     <input
                         type="text"
                         value={name}

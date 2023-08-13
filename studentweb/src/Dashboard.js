@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 function Dashboard() {
     return (
         <div>
-            <h2>Dashboard Page</h2>
+            <h2>Главная страница</h2>
             <Link to="/group">Группы</Link>
-            {}
+            <br/>
+            <Link to="/subject">Предмет</Link>
+            <br/>
+            <Link to="/student">Студенты</Link>
         </div>
     );
 }

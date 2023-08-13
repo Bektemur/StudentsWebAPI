@@ -8,11 +8,11 @@ namespace WebAPI.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<StudentDTO, Student>();
+            CreateMap<StudentDTO, Student>().ReverseMap();
             CreateMap<Group, GroupDTO>().ReverseMap();
-            CreateMap<GradeDTO, GradeDTO>();
-            CreateMap<SubjectDTO, Subject>();
-            CreateMap<GradeDTO, Grade>();
+            CreateMap<GradeDTO, GradeDTO>().ReverseMap();
+            CreateMap<SubjectDTO, Subject>().ReverseMap();
+            CreateMap<GradeDTO, Grade>().ReverseMap();
         }
     }
 }

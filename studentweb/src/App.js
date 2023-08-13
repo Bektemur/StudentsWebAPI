@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import GroupForm from './GroupForm';
 import Login from './Login/Login';
+import AddSubject from './AddSubject';
+import Student from './Student';
 
 function App() {
     return (
@@ -20,7 +22,9 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/student" element = {<Student/>}/>
                     <Route path="/group" element={<GroupForm />} />
+                    <Route path="/subject" element={<AddSubject />} />
                 </Routes>
                 
             </div>
