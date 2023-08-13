@@ -18,10 +18,10 @@ namespace WebAPI.Service
         }
        
 
-        public async Task<IEnumerable<GroupDTO>> GetAllAsync()
+        public async Task<IEnumerable<Group>> GetAllAsync()
         {
             var groups = await _context.Groups.ToListAsync();
-            return _mapper.Map<IEnumerable<GroupDTO>>(groups);
+            return _mapper.Map<IEnumerable<Group>>(groups);
         }
 
         public async Task<GroupDTO> GetByIdAsync(int id)

@@ -18,15 +18,16 @@ function Login() {
                 Password: password,
             });
             const response = await axios.post(`${url}?${queryParams}`);
-            const jwtToken = response.data.token;
-            localStorage.setItem('jwtToken', jwtToken);
+            const jwtToken = response.data;
+            localStorage.setItem('token', jwtToken);
             setIsAuthenticated(true);
 
         }
         catch (error) {
-            console.error('Ошибка авторизации:', error);
+            console.error('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:', error);
         }
         if (isAuthenticated) {
+            console.log(localStorage.getItem('token'));
             navigate('/Dashboard');
         }
 
